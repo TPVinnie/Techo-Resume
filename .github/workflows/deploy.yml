@@ -17,7 +17,7 @@ jobs:
 deploy:
 runs-on: ubuntu-latest
 
-```
+
 steps:
   - name: Checkout code
     uses: actions/checkout@v7
@@ -39,5 +39,4 @@ steps:
     with:
       github_token: ${{ secrets.GITHUB_TOKEN }}
       publish_dir: ./public
-```
 
