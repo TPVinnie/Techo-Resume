@@ -1,32 +1,43 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main  # Change this to the branch you want to deploy from
+push:
+branches:
+- main
+workflow_dispatch:
+
+permissions:
+contents: write
+
+concurrency:
+group: github-pages-deployment
+cancel-in-progress: true
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+deploy:
+runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+```
+steps:
+  - name: Checkout code
+    uses: actions/checkout@v7
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3 # actions/setup-python@v3  # v3 = github actions version
-      with:
-        node-version: '16' # python-version: '3.13'
+  - name: Set up Node.js
+    uses: actions/setup-node@v6
+    with:
+      node-version: "24"
+      package-manager-cache: false
 
-    - name: Install dependencies
-      run: npm install # looks for package.json in repo and installs all mention libs
+  - name: Install dependencies
+    run: npm install
 
-    - name: Build the site
-      run: npm run build  # Adjust this command based on your static site generator
+  - name: Build the site
+    run: npm run build
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.CV_TOKEN }}
-        publish_dir: ./public  # Adjust this path based on where your build output is
-#Access your app via https://your-username.github.io/repository-name/
+  - name: Deploy to GitHub Pages
+    uses: peaceiris/actions-gh-pages@v4
+    with:
+      github_token: ${{ secrets.GITHUB_TOKEN }}
+      publish_dir: ./public
+```
+
